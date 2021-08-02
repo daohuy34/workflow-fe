@@ -16,6 +16,9 @@ export default {
         ],
         link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
     },
+    generate: {
+        fallback: true
+    },
     target: 'static',
     srcDir: 'source/client/',
     // Global CSS: https://go.nuxtjs.dev/config-css
