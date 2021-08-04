@@ -1,7 +1,16 @@
 <template>
-    <Tutorial />
+    <div id="app"></div>
 </template>
-
 <script>
-export default {}
+import Aside from '@/components/Aside'
+export default {
+    components: {},
+    data() {
+        return {
+            isPagesMenuOpen: false,
+            isNotificationsMenuOpen: false,
+            isProfileMenuOpen: false
+        }
+    }
+}
 </script>

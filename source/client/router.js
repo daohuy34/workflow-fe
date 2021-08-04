@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
- /* @vite-ignore */
+/* @vite-ignore */
 // Pages
-const Home = () => import(/* @vite-ignore */`@/pages/home.vue`).then(m => m.default || m)
+const Home = () =>
+    import(/* @vite-ignore */ '@/pages/home.vue').then(m => m.default || m)
 
 Vue.use(Router)
 export function createRouter() {
