@@ -2,9 +2,7 @@
     <div id="app"></div>
 </template>
 <script>
-import Aside from '@/components/Aside'
 export default {
-    components: {},
     data() {
         return {
             isPagesMenuOpen: false,

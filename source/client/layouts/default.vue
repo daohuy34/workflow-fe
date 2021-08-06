@@ -13,6 +13,7 @@
 import Aside from '@/components/Aside'
 import Header from '@/components/Header'
 export default {
+    middleware: 'auth',
     components: {
         Aside,
         Header

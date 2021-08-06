@@ -4,8 +4,13 @@ import Router from 'vue-router'
 // Pages
 const Home = () =>
     import(/* @vite-ignore */ '@/pages/home.vue').then(m => m.default || m)
+const Login = () =>
+    import(/* @vite-ignore */ '@/pages/auth/login.vue').then(
+        m => m.default || m
+    )
 
 Vue.use(Router)
+
 export function createRouter() {
     return new Router({
         mode: 'history',
@@ -24,9 +29,14 @@ export function createRouter() {
         },
         routes: [
             {
-                path: '/',
+                path: '/home',
                 component: Home,
                 name: 'home'
+            },
+            {
+                path: '/dang-nhap',
+                component: Login,
+                name: 'login'
             }
         ]
     })

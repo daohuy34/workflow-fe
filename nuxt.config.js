@@ -25,7 +25,14 @@ export default {
     css: [],
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-    plugins: [],
+    plugins: [
+        { src: '~plugins/vuex-persisted.js', ssr: false }
+        // {
+        //     src: '~plugins/auth',
+        //     ssr: false
+        // }
+        // { src: '~plugins/auth-redirect.js', ssr: false }
+    ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
     components: true,
@@ -71,7 +78,47 @@ export default {
     ],
 
     // Modules: https://go.nuxtjs.dev/config-modules
-    modules: [['@nuxtjs/router', { fileName: 'router.js' }]],
+    modules: [
+        ['@nuxtjs/router', { fileName: 'router.js' }],
+        [
+            '@nuxtjs/firebase',
+            {
+                config: {
+                    apiKey: 'AIzaSyBe-BBXuUzVIXXDl2MVGLBQ7THstM3h2D0',
+                    authDomain: 'test-8613b.firebaseapp.com',
+                    projectId: 'test-8613b',
+                    storageBucket: 'test-8613b.appspot.com',
+                    messagingSenderId: '876651344560',
+                    appId: '1:876651344560:web:a919fa2aceb4cad27cc175',
+                    measurementId: 'G-XM1M208BG3'
+                },
+                services: {
+                    auth: {
+                        persistence: 'local', // default
+                        initialize: {
+                            onAuthStateChangedMutation:
+                                'ON_AUTH_STATE_CHANGED_MUTATION',
+                            onAuthStateChangedAction: 'auth/onAuthStateChanged',
+                            subscribeManually: false
+                        },
+                        ssr: false // default
+                    },
+                    firestore: false,
+                    functions: false,
+                    storage: false,
+                    database: false,
+                    messaging: true,
+                    performance: false,
+                    analytics: false,
+                    remoteConfig: true
+                }
+            }
+        ]
+    ],
+
+    router: {
+        middleware: ['auth']
+    },
 
     // Build Configuration: https://go.nuxtjs.dev/config-build
     build: {

@@ -43,11 +43,7 @@
                                         :key="index"
                                         class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                                     >
-                                        <a
-                                            class="w-full"
-                                            href="pages/login.html"
-                                            >{{ chil.text }}</a
-                                        >
+                                        <a class="w-full">{{ chil.text }}</a>
                                     </li>
                                 </ul>
                             </template>
@@ -69,14 +65,14 @@
                         </template>
                     </li>
                 </ul>
-                <!-- <div class="px-6 my-6">
-                        <button
-                            class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                        >
-                            Create account
-                            <span class="ml-2" aria-hidden="true">+</span>
-                        </button>
-                    </div> -->
+                <div class="px-6 my-6">
+                    <button
+                        @click="logout"
+                        class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                    >
+                        Logout
+                    </button>
+                </div>
             </div>
         </aside>
     </div>
@@ -184,6 +180,13 @@ export default {
                     return (e.active = -1)
                 }
             })
+        },
+        async logout() {
+            try {
+                await this.$fire.auth.signOut()
+            } catch (e) {
+                alert(e)
+            }
         }
     }
 }
