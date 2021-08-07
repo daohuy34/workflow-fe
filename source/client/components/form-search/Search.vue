@@ -66,15 +66,11 @@
     </div>
 </template>
 <script>
-import DateRangePicker from 'vue2-daterange-picker'
-//you need to import the CSS manually
-import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
-
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
 
 export default {
-    components: { DateRangePicker, DatePicker },
+    components: { DatePicker },
     data() {
         return {
             time3: null
