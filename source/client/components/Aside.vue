@@ -1,81 +1,88 @@
 <template>
-    <div>
-        <aside
-            class="z-20 hidden w-56 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0 shadow-md h-full"
-        >
-            <div class="py-4 text-gray-500 dark:text-gray-400">
-                <a
-                    class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200"
-                    href="#"
+    <aside
+        style="position: fixed;left: 0;top: 0;bottom:0"
+        class="z-20 hidden w-52 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0 shadow-md h-full"
+    >
+        <div class="py-4 text-gray-500 dark:text-gray-400">
+            <a
+                class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200"
+                href="#"
+            >
+                Workflow
+            </a>
+            <ul class="mt-6">
+                <li
+                    v-for="(menu, key) in menus"
+                    :key="key"
+                    class="relative px-6 py-3"
                 >
-                    Workflow
-                </a>
-                <ul class="mt-6">
-                    <li
-                        v-for="(menu, key) in menus"
-                        :key="key"
-                        class="relative px-6 py-3"
-                    >
-                        <template v-if="menu.chils.length > 0">
-                            <span
-                                v-if="menu.active > -1"
-                                class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
-                                aria-hidden="true"
-                            ></span>
-                            <button
-                                class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                                @click="redirect(menu)"
-                                aria-haspopup="true"
-                            >
-                                <span class="inline-flex items-center">
-                                    <fa class="w-5 h-5" :icon="menu.icon" />
-                                    <span class="ml-4">{{ menu.text }}</span>
-                                </span>
-                                <fa class="w-4 h-4" icon="chevron-down" />
-                            </button>
-                            <template v-if="menu.active > -1">
-                                <ul
-                                    class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
-                                    aria-label="submenu"
-                                >
-                                    <li
-                                        v-for="(chil, index) in menu.chils"
-                                        :key="index"
-                                        class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
-                                    >
-                                        <a class="w-full">{{ chil.text }}</a>
-                                    </li>
-                                </ul>
-                            </template>
-                        </template>
-                        <template v-else>
-                            <span
-                                v-if="menu.active > -1"
-                                class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
-                                aria-hidden="true"
-                            ></span>
-                            <a
-                                class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
-                                href="#"
-                                @click="redirect(menu)"
-                            >
+                    <template v-if="menu.chils.length > 0">
+                        <span
+                            v-if="menu.active > -1"
+                            class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
+                            aria-hidden="true"
+                        ></span>
+                        <button
+                            class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                            @click="redirect(menu)"
+                            aria-haspopup="true"
+                        >
+                            <span class="inline-flex items-center">
                                 <fa class="w-5 h-5" :icon="menu.icon" />
                                 <span class="ml-4">{{ menu.text }}</span>
-                            </a>
+                            </span>
+                            <fa class="w-4 h-4" icon="chevron-down" />
+                        </button>
+                        <template v-if="menu.active > -1">
+                            <ul
+                                class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
+                                aria-label="submenu"
+                            >
+                                <li
+                                    v-for="(chil, index) in menu.chils"
+                                    :key="index"
+                                    class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                                >
+                                    <a
+                                        @click="
+                                            $router.push({
+                                                name: chil.name
+                                            })
+                                        "
+                                        class="w-full"
+                                        >{{ chil.text }}</a
+                                    >
+                                </li>
+                            </ul>
                         </template>
-                    </li>
-                </ul>
-                <div class="px-6 my-6">
-                    <button
-                        @click="logout"
-                        class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                    >
-                        Logout
-                    </button>
-                </div>
+                    </template>
+                    <template v-else>
+                        <span
+                            v-if="menu.active > -1"
+                            class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
+                            aria-hidden="true"
+                        ></span>
+                        <a
+                            class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
+                            href="#"
+                            @click="redirect(menu)"
+                        >
+                            <fa class="w-5 h-5" :icon="menu.icon" />
+                            <span class="ml-4">{{ menu.text }}</span>
+                        </a>
+                    </template>
+                </li>
+            </ul>
+            <div class="px-6 my-6">
+                <button
+                    @click="logout"
+                    class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                >
+                    Logout
+                </button>
             </div>
-        </aside>
-    </div>
+        </div>
+    </aside>
 </template>
 <script>
 export default {
@@ -87,25 +94,27 @@ export default {
                     id: '1',
                     icon: 'home',
                     text: 'Trang chủ',
-                    slug: 'home',
+                    name: 'home',
                     active: 1,
                     chils: []
                 },
                 {
                     id: '2',
                     icon: 'archive',
-                    text: 'Sản phẩm',
-                    slug: '',
+                    text: 'Thương mại',
                     active: -1,
                     chils: [
                         {
-                            text: 'Danh mục'
+                            text: 'Danh mục',
+                            name: 'category'
                         },
                         {
-                            text: 'Quà'
+                            text: 'Quà',
+                            name: 'gift'
                         },
                         {
-                            text: 'Sản phẩm'
+                            text: 'Sản phẩm',
+                            name: 'product'
                         }
                     ]
                 },
@@ -130,7 +139,17 @@ export default {
                     text: 'Phòng ban',
                     slug: '',
                     active: -1,
-                    chils: []
+                    chils: [
+                        {
+                            text: 'Login'
+                        },
+                        {
+                            text: 'Login'
+                        },
+                        {
+                            text: 'Login'
+                        }
+                    ]
                 },
                 {
                     id: '6',
@@ -180,6 +199,9 @@ export default {
                     return (e.active = -1)
                 }
             })
+            if (item.name) {
+                this.$router.push({ name: item.name })
+            }
         },
         async logout() {
             try {

@@ -4,8 +4,14 @@ import Router from 'vue-router'
 // Pages
 const Home = () =>
     import(/* @vite-ignore */ '@/pages/home.vue').then(m => m.default || m)
+
 const Login = () =>
     import(/* @vite-ignore */ '@/pages/auth/login.vue').then(
+        m => m.default || m
+    )
+
+const ProductIndex = () =>
+    import(/* @vite-ignore */ '@/pages/commerce/product/index.vue').then(
         m => m.default || m
     )
 
@@ -37,6 +43,11 @@ export function createRouter() {
                 path: '/dang-nhap',
                 component: Login,
                 name: 'login'
+            },
+            {
+                path: '/san-pham',
+                component: ProductIndex,
+                name: 'product'
             }
         ]
     })

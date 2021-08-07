@@ -1,12 +1,10 @@
 <template>
-    <div class="flex min-h-screen">
+    <div class="flex min-h-screen bg-gray-200">
         <Aside />
-        <div class="w-full h-24">
-            <Header />
-            <main class="h-full overflow-y-auto">
-                <Nuxt />
-            </main>
-        </div>
+        <Header />
+        <main class="h-full w-full pl-56 pt-24 pb-12 pr-4">
+            <router-view />
+        </main>
     </div>
 </template>
 <script>
