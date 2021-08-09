@@ -2,54 +2,51 @@
     <div
         class="align-middle inline-block w-full py-4 overflow-hidden bg-white px-12"
     >
+        <div class="flex flex-row divide-x divide-gray-500 pb-3">
+            <div class="flex items-center pr-3">
+                <p class="text-3xl font-semibold">{{ configSearch.title }}</p>
+            </div>
+            <div class="pl-3" v-if="configSearch.btnAdd">
+                <button
+                    @click="startFilter"
+                    class="px-5 py-2 border-green-500 border text-green-500 rounded transition duration-300 hover:bg-green-500 hover:text-white focus:outline-none"
+                >
+                    Thêm mới
+                </button>
+            </div>
+        </div>
         <div class="grid grid-cols-4 gap-4">
-            <div
-                class="relative w-full max-w-xl mr-6 focus-within:text-black-500"
-            >
-                <label class="block w-full text-gray-500 pb-1" for="search-text"
-                    >Tìm kiếm</label
-                >
-                <input
-                    type="text"
-                    name="search-text"
-                    class="w-full block placeholder-gray-600 bg-gray-100 border-1 px-2 py-2 rounded border-gray-400 focus:border-purple-300 focus:shadow-outline-purple"
+            <template v-for="field in configSearch.fields">
+                <input-search
+                    :key="field.name"
+                    v-if="field.type === 'text'"
+                    v-model="postData[field.name]"
+                    :field="field"
                 />
-            </div>
-            <div
-                class="relative w-full max-w-xl mr-6 focus-within:text-black-500"
-            >
-                <label class="block w-full text-gray-500 pb-1" for="cars"
-                    >Choose a car:</label
-                >
-                <select
-                    class="w-full block placeholder-gray-600 bg-gray-100 border-1 px-2 py-2.5 rounded border-gray-400 focus:border-purple-300 focus:shadow-outline-purple"
-                    id="cars"
-                >
-                    <option value=""></option>
-                    <option
-                        v-for="index in 5"
-                        :key="index"
-                        :label="`Volvo-${index}`"
-                        >{{ index }}</option
-                    >
-                </select>
-            </div>
-            <div
-                class="relative w-full max-w-xl mr-6 focus-within:text-black-500"
-            >
-                <label class="block w-full text-gray-500 pb-1" for="cars"
-                    >Chọn thời gian</label
-                >
-                <date-picker
-                    v-model="time3"
-                    range
-                    value-type="timestamp"
-                ></date-picker>
-            </div>
+                <select-search
+                    v-model="postData[field.name]"
+                    :key="field.name"
+                    :field="field"
+                    v-else-if="field.type === 'select-single'"
+                />
+                <date-range
+                    v-model="postData[field.name]"
+                    :key="field.name"
+                    :field="field"
+                    v-else-if="field.type === 'date-range'"
+                />
+                <!-- <select-search-multiple
+                    v-model="postData[field.name]"
+                    :key="field.name"
+                    :field="field"
+                    v-else-if="field.type === 'select-multiple'"
+                /> -->
+            </template>
         </div>
         <div class="flex flex-row-reverse space-x-4 space-x-reverse pt-3">
             <div>
                 <button
+                    @click="startFilter"
                     class="px-5 py-2 border-blue-500 border text-blue-500 rounded transition duration-300 hover:bg-blue-700 hover:text-white focus:outline-none"
                 >
                     Lọc
@@ -57,6 +54,7 @@
             </div>
             <div>
                 <button
+                    @click="clearFilter"
                     class="px-5 py-2 border-yellow-500 border text-yellow-500 rounded transition duration-300 hover:bg-yellow-500 hover:text-white focus:outline-none"
                 >
                     Xóa bộ lọc
@@ -66,26 +64,32 @@
     </div>
 </template>
 <script>
-import DatePicker from 'vue2-datepicker'
-import 'vue2-datepicker/index.css'
+import InputSearch from '@/components/form-search/Input'
+import SelectSearch from '@/components/form-search/Select'
+import SelectSearchMultiple from '@/components/form-search/SelectMultiple'
+import DateRange from '@/components/form-search/DateRange'
 
 export default {
-    components: { DatePicker },
+    props: {
+        configSearch: {
+            type: Object,
+            default: null
+        }
+    },
+    components: { InputSearch, SelectSearch, DateRange, SelectSearchMultiple },
     data() {
         return {
-            time3: null
+            searchText: '',
+            postData: {}
         }
     },
-    watch: {
-        time3: function() {
-            console.log(this.time3)
+    methods: {
+        startFilter() {
+            console.log('startFilter', this.postData)
+        },
+        clearFilter() {
+            console.log('clearFilter')
         }
-    },
-    methods: {}
+    }
 }
 </script>
-<style lang="css" scoped>
-.mx-datepicker-range .mx-input-wrapper .mx-input {
-    padding: 19px !important;
-}
-</style>

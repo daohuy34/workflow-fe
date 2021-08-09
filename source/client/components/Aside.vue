@@ -1,7 +1,7 @@
 <template>
     <aside
         style="position: fixed;left: 0;top: 0;bottom:0"
-        class="z-20 hidden w-52 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0 shadow-md h-full"
+        class="z-20 hidden w-52 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0 h-full"
     >
         <div class="py-4 text-gray-500 dark:text-gray-400">
             <a
@@ -23,11 +23,13 @@
                             aria-hidden="true"
                         ></span>
                         <button
-                            class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
+                            class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 cursor-pointer"
                             @click="redirect(menu)"
                             aria-haspopup="true"
                         >
-                            <span class="inline-flex items-center">
+                            <span
+                                class="inline-flex items-center cursor-pointer"
+                            >
                                 <fa class="w-5 h-5" :icon="menu.icon" />
                                 <span class="ml-4">{{ menu.text }}</span>
                             </span>
@@ -49,7 +51,7 @@
                                                 name: chil.name
                                             })
                                         "
-                                        class="w-full"
+                                        class="w-full cursor-pointer"
                                         >{{ chil.text }}</a
                                     >
                                 </li>
