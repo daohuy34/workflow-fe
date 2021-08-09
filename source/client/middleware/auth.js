@@ -4,7 +4,7 @@ export default function({ store, redirect, route }) {
     const isLoggedIn = store.getters['auth/isLoggedIn']
     // đã đăng nhập, vào trang intro, chuyển qua trang home
     if (route.fullPath === '/' && isLoggedIn) {
-        return redirect('/home')
+        return redirect('/trang-chu')
     }
     if (notNeedAuthPages.includes(route.fullPath)) return
     if (!isLoggedIn) {

@@ -15,6 +15,16 @@ const ProductIndex = () =>
         m => m.default || m
     )
 
+const GiftIndex = () =>
+    import(/* @vite-ignore */ '@/pages/commerce/gift/index.vue').then(
+        m => m.default || m
+    )
+
+const ColllectionIndex = () =>
+    import(/* @vite-ignore */ '@/pages/commerce/collection/index.vue').then(
+        m => m.default || m
+    )
+
 Vue.use(Router)
 
 export function createRouter() {
@@ -35,9 +45,9 @@ export function createRouter() {
         },
         routes: [
             {
-                path: '/home',
+                path: '/trang-chu',
                 component: Home,
-                name: 'home'
+                name: 'dashboard'
             },
             {
                 path: '/dang-nhap',
@@ -48,6 +58,16 @@ export function createRouter() {
                 path: '/san-pham',
                 component: ProductIndex,
                 name: 'product'
+            },
+            {
+                path: '/qua-tang',
+                component: GiftIndex,
+                name: 'gift'
+            },
+            {
+                path: '/danh-muc',
+                component: ColllectionIndex,
+                name: 'collection'
             }
         ]
     })

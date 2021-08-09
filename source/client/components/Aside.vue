@@ -1,43 +1,64 @@
 <template>
-    <aside
-        style="position: fixed;left: 0;top: 0;bottom:0"
-        class="z-20 hidden w-52 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0 h-full"
+    <div
+        style="position: fixed; bottom: 0; left: 0; top: 0;"
+        class="p-6 mr-5 w-60 bg-white"
     >
-        <div class="py-4 text-gray-500 dark:text-gray-400">
-            <a
-                class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200"
-                href="#"
-            >
-                Workflow
-            </a>
-            <ul class="mt-6">
+        <div class="flex space-2 items-center border-b-2 pb-4">
+            <div class="items-center">
+                <h1 class="text-3xl font-bold text-indigo-600">Workflow</h1>
+                <p class="text-center text-sm text-indigo-600 mt-1 font-serif">
+                    DASHBOARD
+                </p>
+            </div>
+        </div>
+        <div class="mt-8">
+            <ul class="space-y-6">
                 <li
+                    class="hover:text-indigo-600"
                     v-for="(menu, key) in menus"
                     :key="key"
-                    class="relative px-6 py-3"
                 >
-                    <template v-if="menu.chils.length > 0">
-                        <span
-                            v-if="menu.active > -1"
-                            class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
-                            aria-hidden="true"
-                        ></span>
-                        <button
-                            class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 cursor-pointer"
+                    <template v-if="menu.chils.length === 0">
+                        <a
                             @click="redirect(menu)"
-                            aria-haspopup="true"
+                            class="flex justify-between items-center  text-sm font-semibold text-gray-500 hover:text-indigo-600 transition duration-200"
                         >
-                            <span
-                                class="inline-flex items-center cursor-pointer"
+                            <p
+                                class="flex items-center mb-0 hover:text-indigo-600"
                             >
-                                <fa class="w-5 h-5" :icon="menu.icon" />
-                                <span class="ml-4">{{ menu.text }}</span>
-                            </span>
-                            <fa class="w-4 h-4" icon="chevron-down" />
-                        </button>
+                                <fa
+                                    class="h-6 w-6 mr-4 text-gray-400 transition duration-200"
+                                    :icon="menu.icon"
+                                />
+                                <span>{{ menu.text }}</span>
+                            </p>
+                        </a>
+                    </template>
+                    <template v-else>
+                        <a
+                            @click="redirect(menu)"
+                            class="flex justify-between items-center text-sm font-semibold text-gray-500 hover:text-indigo-600 transition duration-200"
+                        >
+                            <p class="flex items-center mb-0">
+                                <fa
+                                    class="h-6 w-6 mr-4 text-gray-400 hover:text-indigo-600 transition duration-200"
+                                    :icon="menu.icon"
+                                />
+                                <span>{{ menu.text }}</span>
+                            </p>
+                            <fa
+                                v-if="menu.chils.length > 0"
+                                class="w-4 h-4"
+                                :icon="
+                                    menu.active > -1
+                                        ? 'chevron-down'
+                                        : 'chevron-up'
+                                "
+                            />
+                        </a>
                         <template v-if="menu.active > -1">
                             <ul
-                                class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
+                                class="p-2 pl-5 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 dark:text-gray-400 dark:bg-gray-900"
                                 aria-label="submenu"
                             >
                                 <li
@@ -46,11 +67,7 @@
                                     class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                                 >
                                     <a
-                                        @click="
-                                            $router.push({
-                                                name: chil.name
-                                            })
-                                        "
+                                        @click="redirect(chil, true)"
                                         class="w-full cursor-pointer"
                                         >{{ chil.text }}</a
                                     >
@@ -58,33 +75,33 @@
                             </ul>
                         </template>
                     </template>
-                    <template v-else>
-                        <span
-                            v-if="menu.active > -1"
-                            class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"
-                            aria-hidden="true"
-                        ></span>
-                        <a
-                            class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200 dark:text-gray-100"
-                            href="#"
-                            @click="redirect(menu)"
-                        >
-                            <fa class="w-5 h-5" :icon="menu.icon" />
-                            <span class="ml-4">{{ menu.text }}</span>
-                        </a>
-                    </template>
                 </li>
             </ul>
-            <div class="px-6 my-6">
-                <button
-                    @click="logout"
-                    class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                >
-                    Logout
-                </button>
-            </div>
         </div>
-    </aside>
+        <div class="flex space-x-4 items-center fixed bottom-6">
+            <div>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 text-gray-400 hover:text-indigo-600 transition duration-200"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                    />
+                </svg>
+            </div>
+            <a
+                @click="logout"
+                class="block font-semibold text-gray-500 hover:text-indigo-600 transition duration-200"
+                >Đăng xuất</a
+            >
+        </div>
+    </div>
 </template>
 <script>
 export default {
@@ -96,7 +113,7 @@ export default {
                     id: '1',
                     icon: 'home',
                     text: 'Trang chủ',
-                    name: 'home',
+                    name: 'dashboard',
                     active: 1,
                     chils: []
                 },
@@ -108,7 +125,7 @@ export default {
                     chils: [
                         {
                             text: 'Danh mục',
-                            name: 'category'
+                            name: 'collection'
                         },
                         {
                             text: 'Quà',
@@ -193,15 +210,18 @@ export default {
         }
     },
     methods: {
-        redirect(item) {
-            this.menus.map(e => {
-                if (e.id === item.id) {
-                    return (e.active = 1)
-                } else {
-                    return (e.active = -1)
-                }
-            })
+        redirect(item, isChil = false) {
+            if (!isChil) {
+                this.menus.map(e => {
+                    if (e.id === item.id) {
+                        return (e.active = -e.active)
+                    } else {
+                        return (e.active = -1)
+                    }
+                })
+            }
             if (item.name) {
+                this.$store.dispatch('breadcrumbs/add', item)
                 this.$router.push({ name: item.name })
             }
         },
