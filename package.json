@@ -2,6 +2,7 @@
     "name": "workflow-front-end",
     "version": "1.0.0",
     "private": true,
+    "author": "Quang Huy",
     "scripts": {
         "dev": "nuxt",
         "build": "nuxt build",
@@ -9,6 +10,29 @@
         "generate": "nuxt generate",
         "test": "jest"
     },
+    "license": "MIT",
+    "engines": {
+        "node": ">=10",
+        "yarn": "*"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:daohuy34/workflow-fe.git"
+    },
+    "keywords": [
+        "express",
+        "node",
+        "node.js",
+        "es6",
+        "es7",
+        "es8",
+        "es2017",
+        "eslint",
+        "vue",
+        "nuxt",
+        "vue2",
+        "vuex"
+    ],
     "dependencies": {
         "@fortawesome/free-brands-svg-icons": "^5.7.0",
         "@fortawesome/free-regular-svg-icons": "^5.6.3",

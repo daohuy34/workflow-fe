@@ -72,6 +72,7 @@ export default {
             configCRUD: {
                 btnEdit: true,
                 btnDel: true,
+                btnMore: true,
                 model: 'products',
                 fields: [
                     {
@@ -101,6 +102,11 @@ export default {
                     {
                         label: '',
                         value: 'action'
+                    }
+                ],
+                moreArray: [
+                    {
+                        label: 'Thêm số lượng'
                     }
                 ]
             }

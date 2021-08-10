@@ -72,7 +72,7 @@
                                 v-if="config.btnEdit"
                                 class="px-5 py-2 border-blue-500 border text-blue-500 rounded transition duration-300 hover:bg-blue-400 hover:text-white focus:outline-none"
                             >
-                                Chi tiết
+                                Sửa
                             </button>
                             <button
                                 v-if="config.btnDel"
@@ -80,6 +80,24 @@
                             >
                                 Xóa
                             </button>
+                            <!-- <button
+                                @click="showMore = !showMore"
+                                v-if="
+                                    config.btnMore &&
+                                        config.moreArray.length > 0
+                                "
+                                class="px-5 py-2 border-transparent border text-red-500 rounded transition duration-300 focus:outline-none"
+                            >
+                                <fa icon="ellipsis-v" />
+                            </button>
+                            <ul v-show="showMore">
+                                <li
+                                    v-for="(i, index) in config.moreArray"
+                                    :key="index"
+                                >
+                                    {{ i.label }}
+                                </li>
+                            </ul> -->
                         </td>
                     </tr>
                 </tbody>
@@ -100,6 +118,11 @@ export default {
     },
     components: {
         Pagination
+    },
+    data() {
+        return {
+            showMore: false
+        }
     }
 }
 </script>

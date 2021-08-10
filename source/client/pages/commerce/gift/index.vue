@@ -16,7 +16,7 @@ export default {
     data() {
         return {
             configSearch: {
-                title: 'Sản phẩm',
+                title: 'Quà',
                 btnAdd: true,
                 fields: [
                     {

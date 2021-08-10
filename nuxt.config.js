@@ -63,7 +63,8 @@ export default {
                             'faUserFriends',
                             'faProjectDiagram',
                             'faBookmark',
-                            'faTimesCircle'
+                            'faTimesCircle',
+                            'faEllipsisV'
                         ]
                     },
                     {
