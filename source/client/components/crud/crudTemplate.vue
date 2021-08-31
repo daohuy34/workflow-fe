@@ -3,107 +3,37 @@
         <div
             class="align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard px-8 pt-3"
         >
-            <table class="min-w-full">
-                <thead>
-                    <tr>
-                        <th
-                            v-for="(field, index) in config.fields"
-                            :key="index"
-                            class="px-6 py-3 border-b-2 border-gray-300 text-left leading-4 text-blue-500 tracking-wider "
-                        >
-                            {{ field.label }}
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white">
-                    <tr v-for="index in 10" :key="index">
-                        <td
-                            class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                        >
-                            <div class="flex items-center">
-                                <div>
-                                    <div
-                                        class="text-sm leading-5 text-gray-800"
-                                    >
-                                        #1
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td
-                            class="px-6 py-4 whitespace-no-wrap border-b border-gray-500"
-                        >
-                            <div class="text-sm leading-5 text-blue-900">
-                                Damilare Anjorin
-                            </div>
-                        </td>
-                        <td
-                            class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5"
-                        >
-                            damilareanjorin1@gmail.com
-                        </td>
-                        <td
-                            class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5"
-                        >
-                            +2348106420637
-                        </td>
-                        <td
-                            class="px-6 py-4 whitespace-no-wrap border-b text-blue-900 border-gray-500 text-sm leading-5"
-                        >
-                            <span
-                                class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight"
-                            >
-                                <span
-                                    aria-hidden
-                                    class="absolute inset-0 bg-green-200 opacity-50 rounded-full"
-                                ></span>
-                                <span class="relative text-xs">active</span>
-                            </span>
-                        </td>
-                        <td
-                            class="px-6 py-4 whitespace-no-wrap border-b border-gray-500 text-blue-900 text-sm leading-5"
-                        >
-                            September 12
-                        </td>
-                        <td
-                            class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-500 text-sm leading-5"
-                        >
-                            <button
-                                v-if="config.btnEdit"
-                                class="px-5 py-2 border-blue-500 border text-blue-500 rounded transition duration-300 hover:bg-blue-400 hover:text-white focus:outline-none"
-                            >
-                                Sửa
-                            </button>
-                            <button
-                                v-if="config.btnDel"
-                                class="px-5 py-2 border-red-500 border text-red-500 rounded transition duration-300 hover:bg-red-400 hover:text-white focus:outline-none"
-                            >
-                                Xóa
-                            </button>
-                            <!-- <button
-                                @click="showMore = !showMore"
-                                v-if="
-                                    config.btnMore &&
-                                        config.moreArray.length > 0
-                                "
-                                class="px-5 py-2 border-transparent border text-red-500 rounded transition duration-300 focus:outline-none"
-                            >
-                                <fa icon="ellipsis-v" />
-                            </button>
-                            <ul v-show="showMore">
-                                <li
-                                    v-for="(i, index) in config.moreArray"
-                                    :key="index"
-                                >
-                                    {{ i.label }}
-                                </li>
-                            </ul> -->
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <a-table rowKey="uid" :data-source="items">
+                <span slot="tag" slot-scope="record">
+                    {{ record }}
+                    <template v-if="record.type === 'text'">
+                        {{ record.key }}
+                        <a-tag :color="!record.key ? 'red' : 'green'">
+                            {{ record ? 'Kích hoạt' : 'Vô hiệu hóa' }}
+                        </a-tag>
+                    </template>
+                    <template v-else-if="record.type === type.ARRAY">
+                        <a-tag v-for="tag in tags" :key="tag" color="blue">{{
+                            tag
+                        }}</a-tag>
+                    </template>
+                </span>
+                <span slot="action" slot-scope="text, record">
+                    <a-button
+                        @click="edit(text, record)"
+                        type="primary"
+                        shape="circle"
+                        icon="edit"
+                    />
+                    <a-button
+                        type="danger"
+                        @click="remove(text, record)"
+                        shape="circle"
+                        icon="delete"
+                    />
+                </span>
+            </a-table>
         </div>
-        <pagination />
     </div>
 </template>
 <script>
@@ -121,7 +51,50 @@ export default {
     },
     data() {
         return {
-            showMore: false
+            type: {
+                TEXT: 'text',
+                ARRAY: 'array'
+            },
+            showMore: false,
+            condistion: {
+                page: 1,
+                perPage: 10
+            },
+            items: [],
+            totalItem: 0,
+            selectedRowKeys: [] // Check here to configure the default column
+        }
+    },
+    computed: {
+        hasSelected() {
+            return this.selectedRowKeys.length > 0
+        }
+    },
+    async created() {
+        await this.fetchData()
+    },
+
+    methods: {
+        async fetchData() {
+            try {
+                const data = await fetchDataService.getList(
+                    this,
+                    'users',
+                    this.condistion
+                )
+                if (data) {
+                    this.items = data.items
+                    this.totalItem = data.totalItems
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        edit(text, record) {
+            console.log(text, record)
+        },
+        remove(text, record) {
+            console.log(text, record)
         }
     }
 }

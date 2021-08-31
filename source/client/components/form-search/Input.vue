@@ -3,11 +3,12 @@
         <label class="block w-full text-gray-500 pb-1" :for="field.name">{{
             field.label
         }}</label>
-        <input
-            v-model="value"
+        <a-input-search
             type="text"
             :name="field.name"
-            class="w-full block placeholder-gray-600 bg-gray-100 border-1 px-2 py-2 rounded border-gray-400 focus:border-purple-300 focus:shadow-outline-purple"
+            size="large"
+            :placeholder="field.placeholder"
+            v-model="value"
         />
     </div>
 </template>

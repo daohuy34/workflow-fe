@@ -3,19 +3,22 @@
         <label class="block w-full text-gray-500 pb-1" :for="field.name">{{
             field.label
         }}</label>
-        <select
+        <a-select
+            class="w-full"
             v-model="value"
-            class="w-full block placeholder-gray-600 bg-gray-100 border-1 px-2 py-2.5 rounded border-gray-400 focus:border-purple-300 focus:shadow-outline-purple"
+            size="large"
             :name="field.name"
+            @change="handleChange"
+            :placeholder="field.placeholder"
         >
-            <option value=""></option>
-            <option
+            <a-select-option
                 v-for="(option, index) in field.options"
                 :key="index"
-                :label="option.label"
-                :value="option.value"
-            ></option>
-        </select>
+                :value="`${option.value}`"
+            >
+                {{ option.label }}
+            </a-select-option>
+        </a-select>
     </div>
 </template>
 <script>
@@ -30,12 +33,10 @@ export default {
             value: ''
         }
     },
-    watch: {
-        value: {
-            async handler(val) {
-                this.$emit('input', val)
-            },
-            deep: true
+    methods: {
+        handleChange(value) {
+            let boolean = value ? true : false
+            this.$emit('input', boolean)
         }
     }
 }

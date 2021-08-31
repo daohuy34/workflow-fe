@@ -26,12 +26,10 @@ export default {
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
     plugins: [
-        { src: '~plugins/vuex-persisted.js', ssr: false }
-        // {
-        //     src: '~plugins/auth',
-        //     ssr: false
-        // }
-        // { src: '~plugins/auth-redirect.js', ssr: false }
+        { src: '~plugins/axios' },
+        { src: '~plugins/filter' },
+        { src: '~plugins/vuex-persisted.js', ssr: false },
+        { src: '~plugins/ant-design.js', ssr: false }
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
@@ -82,6 +80,8 @@ export default {
 
     // Modules: https://go.nuxtjs.dev/config-modules
     modules: [
+        '@nuxtjs/axios',
+        '@nuxtjs/auth',
         ['@nuxtjs/router', { fileName: 'router.js' }],
         [
             '@nuxtjs/firebase',
@@ -96,16 +96,7 @@ export default {
                     measurementId: 'G-XM1M208BG3'
                 },
                 services: {
-                    auth: {
-                        persistence: 'local', // default
-                        initialize: {
-                            onAuthStateChangedMutation:
-                                'ON_AUTH_STATE_CHANGED_MUTATION',
-                            onAuthStateChangedAction: 'auth/onAuthStateChanged',
-                            subscribeManually: false
-                        },
-                        ssr: false // default
-                    },
+                    auth: true,
                     firestore: false,
                     functions: false,
                     storage: false,
@@ -163,6 +154,61 @@ export default {
         // experimentWarning: false // hide experimental warning message (disabled by default for tests)
         vue: {
             /* options for vite-plugin-vue2 */
+        }
+    },
+    /*
+     ** Axios module configuration
+     */
+    axios: {
+        // See https://github.com/nuxt-community/axios-module#options
+        baseURL: '$API_URL'
+    },
+    auth: {
+        // Options
+        // cookie: false,
+        resetOnError: true,
+        plugins: ['~plugins/auth-redirect.js', '~plugins/auto-auth.js'],
+        redirect: {
+            login: '/dang-nhap',
+            logout: '/dang-nhap',
+            callback: '/auth/handler',
+            user: '/trang-chu',
+            home: '/trang-chu'
+        },
+        redirectFrom: ['/dang-nhap', '/auth/handler'],
+        strategies: {
+            local: {
+                endpoints: {
+                    login: {
+                        url: '/v1/auth/login',
+                        method: 'post',
+                        propertyName: 'token.accessToken',
+                        refreshTokenPropertyName: 'token.refreshToken',
+                        expiredAtPropertyName: 'token.expiredAt'
+                    },
+                    refresh: {
+                        url: '/v1/auth/refresh-token/web',
+                        method: 'post',
+                        propertyName: 'accessToken',
+                        refreshTokenPropertyName: 'refreshToken',
+                        expiredAtPropertyName: 'expiredAt'
+                    },
+                    logout: { url: '/v1/auth/logout', method: 'post' },
+                    user: {
+                        url: '/v1/users/profile',
+                        method: 'get',
+                        propertyName: null
+                    }
+                },
+                tokenRequired: true,
+                tokenType: 'Bearer',
+                refreshToken: true,
+                buildRefreshTokenRequest: refreshToken => ({
+                    data: {
+                        refreshToken
+                    }
+                })
+            }
         }
     }
 }

@@ -8,6 +8,8 @@ const logError = err => {
 
 const getList = async function(context, model, params = {}) {
     try {
+        console.log(model)
+
         let response = await context.$axios.get(`/v1/${model}`, {
             params
         })

@@ -1,8 +1,6 @@
 <template>
     <div class="flex items-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900">
-        <div
-            class="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800"
-        >
+        <div class="flex-1 h-full max-w-4xl mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800">
             <div class="flex flex-col overflow-y-auto md:flex-row">
                 <div class="h-32 md:h-auto md:w-1/2">
                     <img
@@ -12,19 +10,13 @@
                         alt="Office"
                     />
                 </div>
-                <div
-                    class="flex items-center justify-center p-6 sm:p-12 md:w-1/2"
-                >
+                <div class="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
                     <div class="w-full">
-                        <h1
-                            class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200"
-                        >
+                        <h1 class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200">
                             Login
                         </h1>
                         <label class="block text-sm">
-                            <span class="text-gray-700 dark:text-gray-400"
-                                >Email</span
-                            >
+                            <span class="text-gray-700 dark:text-gray-400">Email</span>
                             <input
                                 v-model="form.email"
                                 class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
@@ -32,9 +24,7 @@
                             />
                         </label>
                         <label class="block mt-4 text-sm">
-                            <span class="text-gray-700 dark:text-gray-400"
-                                >Password</span
-                            >
+                            <span class="text-gray-700 dark:text-gray-400">Password</span>
                             <input
                                 v-model="form.password"
                                 class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
@@ -59,6 +49,8 @@
     </div>
 </template>
 <script>
+// import fetchData from '@/services/fetch-data'
+
 export default {
     layout: 'auth',
     auth: false,
@@ -73,28 +65,19 @@ export default {
     methods: {
         async signInUser() {
             try {
-                await this.$fire.auth.signInWithEmailAndPassword(
-                    this.form.email,
-                    this.form.password
-                )
-
-                this.$fire.auth.onAuthStateChanged(async user => {
-                    if (user) {
-                        const idToken = await user.getIdToken(true)
-                        const data = {
-                            id: user.uid,
-                            idToken,
-                            email: user.email,
-                            refreshToken: user.refreshToken,
-                            displayName: user.displayName,
-                            phoneNumber: user.phoneNumber,
-                            photoURL: user.photoURL || null
-                        }
-                        this.$router.push('/home')
-                    } else {
-                        // No user is signed in.
+                const login = await this.$auth.loginWith('local', {
+                    data: {
+                        email: this.form.email,
+                        password: this.form.password
                     }
                 })
+                if (
+                    login.status === 200 &&
+                    login.data.token &&
+                    login.data.token.accessToken
+                ) {
+                    this.$router.push('/trang-chu')
+                }
             } catch (e) {
                 alert(e)
             }

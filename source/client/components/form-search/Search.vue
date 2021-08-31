@@ -1,14 +1,23 @@
 <template>
-    <div
-        class="align-middle inline-block w-full py-4 overflow-hidden bg-white px-12"
-    >
+    <div class="align-middle inline-block w-full py-4 overflow-hidden bg-white px-12">
         <div class="flex flex-row divide-x divide-gray-500 pb-3">
             <div class="flex items-center pr-3">
-                <p class="text-3xl font-semibold">{{ configSearch.title }}</p>
+                <p class="text-3xl font-semibold mb-0">
+                    {{ configSearch.title }}
+                </p>
             </div>
-            <div class="pl-3" v-if="configSearch.btnAdd">
+            <div
+                class="pl-3"
+                v-if="configSearch.btnAdd"
+            >
                 <button
-                    @click="startFilter"
+                    v-if="permissionAdd"
+                    @click="
+                        $router.push({
+                            name: configSearch.linkAdd,
+                            params: { id: 'add' }
+                        })
+                    "
                     class="px-5 py-2 border-green-500 border text-green-500 rounded transition duration-300 hover:bg-green-500 hover:text-white focus:outline-none"
                 >
                     Thêm mới
@@ -35,12 +44,12 @@
                     :field="field"
                     v-else-if="field.type === 'date-range'"
                 />
-                <!-- <select-search-multiple
+                <select-search-multiple
                     v-model="postData[field.name]"
                     :key="field.name"
                     :field="field"
                     v-else-if="field.type === 'select-multiple'"
-                /> -->
+                />
             </template>
         </div>
         <div class="flex flex-row-reverse space-x-4 space-x-reverse pt-3">
@@ -74,6 +83,10 @@ export default {
         configSearch: {
             type: Object,
             default: null
+        },
+        configCRUD: {
+            type: Object,
+            default: null
         }
     },
     components: { InputSearch, SelectSearch, DateRange, SelectSearchMultiple },
@@ -81,6 +94,13 @@ export default {
         return {
             searchText: '',
             postData: {}
+        }
+    },
+    computed: {
+        permissionAdd() {
+            return this.$auth.user.permissions.includes(
+                this.configCRUD.actionPermissions.create
+            )
         }
     },
     methods: {

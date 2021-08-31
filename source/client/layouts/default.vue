@@ -1,14 +1,18 @@
 <template>
-    <div class="min-h-screen flex bg-indigo-50">
-        <Aside />
-        <div class="bg-indigo-50 flex-grow p-3 pl-64 pb-12 pr-4 h-full">
-            <Header />
-            <breadcrumbs />
-            <main class="h-full w-full bg-indigo-50">
-                <router-view />
-            </main>
-        </div>
-    </div>
+    <a-layout id="components-layout-demo-fixed-sider">
+        <Aside :collapsed="collapsed" />
+        <a-layout :style="{ marginLeft: collapsed?'80px': '200px' }">
+            <Header @onChangeCollapsed="collapsed=$event" />
+            <a-layout-content :style="{ margin: '10px 10px 0', overflow: 'initial' }">
+                <div :style="{ padding: '24px', background: '#fff', textAlign: 'center' }">
+                    <router-view />
+                </div>
+            </a-layout-content>
+            <a-layout-footer :style="{ textAlign: 'center' }">
+                Workflow 2021
+            </a-layout-footer>
+        </a-layout>
+    </a-layout>
 </template>
 <script>
 import Aside from '@/components/Aside'
@@ -23,7 +27,9 @@ export default {
         Breadcrumbs
     },
     data() {
-        return {}
+        return {
+            collapsed: false
+        }
     }
 }
 </script>

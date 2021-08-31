@@ -1,5 +1,6 @@
 <template>
-    <div id="app">
+    <div>content</div>
+    <!-- <div id="app">
         <div class="flex">
             <div
                 class="flex items-center justify-around p-6 bg-white w-64 rounded-xl space-x-2 mt-10 shadow-lg"
@@ -126,9 +127,11 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </template>
 <script>
+import fetchData from '@/services/fetch-data'
+
 export default {
     data() {
         return {
@@ -136,6 +139,9 @@ export default {
             isNotificationsMenuOpen: false,
             isProfileMenuOpen: false
         }
+    },
+    async created() {
+        await fetchData.getList(this, 'status')
     }
 }
 </script>
