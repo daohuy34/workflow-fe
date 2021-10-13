@@ -1,6 +1,9 @@
 <template>
     <div class="relative w-full max-w-xl mr-6 focus-within:text-black-500">
-        <label class="block w-full text-gray-500 pb-1" :for="field.name">{{
+        <label
+            class="block w-full text-gray-500 pb-1 text-left"
+            :for="field.name"
+        >{{
             field.label
         }}</label>
         <a-input-search

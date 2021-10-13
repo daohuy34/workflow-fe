@@ -1,15 +1,21 @@
 <template>
-    <a-layout-sider
-        v-model="collapsed"
-        :trigger="null"
-        collapsible
-        :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }"
+    <a-col
+        id="sidebar"
+        class="sidebar"
+        :span="3"
     >
-        <div class="logo"></div>
+        <a-card hoverable>
+            <a-card-meta :title="$auth.user.name">
+                <a-avatar
+                    slot="avatar"
+                    src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                />
+            </a-card-meta>
+        </a-card>
         <a-menu
-            theme="dark"
             mode="inline"
-            :default-selected-keys="['0']"
+            :class="['', collapsed?'w-56':'']"
+            :style="{ color: '#000', borderRight: 'none'}"
             :inline-collapsed="collapsed"
         >
             <template v-for="(menu, index) in menus">
@@ -18,6 +24,7 @@
                     :key="index"
                     @click="redirect(menu)"
                     v-show="!menu.permission || $auth.user.permissions.some(element => element.includes(menu.permission))"
+                    :style="{ background: 'transparent'}"
                 >
                     <a-icon :type="menu.icon" />
                     <span>{{menu.text}}</span>
@@ -26,6 +33,7 @@
                     v-else
                     :key="index"
                     v-show="!menu.permission || $auth.user.permissions.some(element => element.includes(menu.permission))"
+                    :style="{ background: 'transparent'}"
                 >
                     <span slot="title">
                         <a-icon :type="menu.icon" /><span>{{menu.text}}</span></span>
@@ -40,7 +48,7 @@
                 </a-sub-menu>
             </template>
         </a-menu>
-    </a-layout-sider>
+    </a-col>
 </template>
 <script>
 export default {
@@ -57,7 +65,7 @@ export default {
                 {
                     id: '1',
                     icon: 'home',
-                    text: 'Trang chủ',
+                    text: 'Dashboard',
                     name: 'dashboard',
                     active: 1,
                     chils: []
@@ -65,7 +73,7 @@ export default {
                 {
                     id: '2',
                     icon: 'shop',
-                    text: 'Thương mại',
+                    text: 'E-commerce',
                     active: -1,
                     permission: 'ecommerce',
                     chils: [
@@ -86,90 +94,55 @@ export default {
                             name: 'product',
                             active: -1,
                             permission: 'product_view'
-                        }
-                    ]
-                },
-                {
-                    id: '3',
-                    icon: 'shopping',
-                    text: 'Đơn hàng',
-                    slug: '',
-                    active: -1,
-                    permission: 'order',
-                    chils: [
-                        {
-                            text: 'Đơn quà',
-                            permission: 'gift_order_view'
                         },
                         {
-                            text: 'Đơn sản phẩm',
+                            text: 'Đơn hàng',
+                            name: 'order',
+                            active: -1,
                             permission: 'order_view'
-                        }
-                    ]
-                },
-                {
-                    id: '4',
-                    icon: 'team',
-                    text: 'Phòng ban',
-                    slug: '',
-                    active: -1,
-                    permission: 'room',
-                    chils: [
-                        {
-                            text: 'Login',
-                            permission: ''
-                        },
-                        {
-                            text: 'Login',
-                            permission: ''
-                        },
-                        {
-                            text: 'Login',
-                            permission: ''
                         }
                     ]
                 },
                 {
                     id: '6',
                     icon: 'project',
-                    text: 'Dự án',
-                    slug: '',
+                    text: 'Project list',
+                    name: 'dashboard',
                     active: -1,
                     permission: 'project',
-                    chils: [
-                        {
-                            text: 'Login'
-                        },
-                        {
-                            text: 'Login'
-                        },
-                        {
-                            text: 'Login'
-                        }
-                    ]
+                    chils: []
                 },
                 {
                     id: '7',
+                    icon: 'team',
+                    text: 'Team board',
+                    name: 'team',
+                    active: -1,
+                    permission: 'team',
+                    chils: []
+                },
+                {
+                    id: '8',
                     icon: 'snippets',
-                    text: 'Tổng hợp',
+                    text: 'Synthetic',
                     slug: '',
                     active: -1,
                     permission: 'synthetic',
                     chils: [
                         {
-                            text: 'Tài khoản',
+                            text: 'Account list',
                             name: 'user',
                             active: -1,
                             permission: 'user_view'
                         },
                         {
-                            text: 'Phân quyền',
+                            text: 'Permission',
                             name: 'permission',
                             active: -1,
                             permission: 'permission_view'
                         },
                         {
-                            text: 'Báo cáo',
+                            text: 'Report',
                             name: 'reoprt',
                             active: -1,
                             permission: 'report_view'
@@ -202,16 +175,7 @@ export default {
 }
 </script>
 <style>
-#components-layout-demo-fixed-sider .trigger {
-    font-size: 18px;
-    line-height: 64px;
-    padding: 0 24px;
-    cursor: pointer;
-    transition: color 0.3s;
-}
-#components-layout-demo-fixed-sider .logo {
-    height: 32px;
-    background: rgba(255, 255, 255, 0.2);
-    margin: 16px;
+.ant-menu-horizontal {
+    border-bottom: none;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="align-middle inline-block w-full py-4 overflow-hidden bg-white px-12">
+    <div class="inline-block w-full py-4 overflow-hidden bg-white px-3">
         <div class="flex flex-row divide-x divide-gray-500 pb-3">
             <div class="flex items-center pr-3">
                 <p class="text-3xl font-semibold mb-0">
@@ -20,7 +20,7 @@
                     "
                     class="px-5 py-2 border-green-500 border text-green-500 rounded transition duration-300 hover:bg-green-500 hover:text-white focus:outline-none"
                 >
-                    Thêm mới
+                    Add new
                 </button>
             </div>
         </div>
@@ -105,10 +105,11 @@ export default {
     },
     methods: {
         startFilter() {
-            console.log('startFilter', this.postData)
+            this.$emit('startFilter', this.postData)
         },
         clearFilter() {
-            console.log('clearFilter')
+            this.postData = {}
+            this.$emit('clearFilter', this.postData)
         }
     }
 }

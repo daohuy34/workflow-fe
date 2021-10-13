@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="px-6 py-3">
         <a-row>
             <a-col>
                 <a-form
@@ -47,6 +47,9 @@
                             </div>
                         </a-upload>
                     </a-form-item>
+                    <a-form-model-item label="Trạng thái">
+                        <a-switch v-model="form.isActive" />
+                    </a-form-model-item>
                 </a-form>
             </a-col>
         </a-row>
@@ -84,6 +87,12 @@
 <script>
 import fetchDataService from '@/services/fetch-data'
 
+function getBase64(img, callback) {
+    const reader = new FileReader()
+    reader.addEventListener('load', () => callback(reader.result))
+    reader.readAsDataURL(img)
+}
+
 export default {
     data() {
         return {
@@ -92,7 +101,9 @@ export default {
             form: {
                 name: '',
                 slug: '',
-                description: ''
+                description: '',
+                logo:
+                    'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
             }
         }
     },
@@ -147,6 +158,7 @@ export default {
         },
         cancel() {
             console.log('cancel')
+            this.$router.go(-1)
         },
         validations() {
             if (!this.form.name || !this.form.slug || !this.form.description) {
@@ -158,6 +170,31 @@ export default {
                 return false
             }
             return true
+        },
+        handleChange(info) {
+            if (info.file.status === 'uploading') {
+                this.loading = true
+                return
+            }
+            if (info.file.status === 'done') {
+                // Get this url from response in real world.
+                getBase64(info.file.originFileObj, imageUrl => {
+                    this.form.logo = imageUrl
+                    this.loading = false
+                })
+            }
+        },
+        beforeUpload(file) {
+            const isJpgOrPng =
+                file.type === 'image/jpeg' || file.type === 'image/png'
+            if (!isJpgOrPng) {
+                this.$message.error('You can only upload JPG file!')
+            }
+            const isLt2M = file.size / 1024 / 1024 < 2
+            if (!isLt2M) {
+                this.$message.error('Image must smaller than 2MB!')
+            }
+            return isJpgOrPng && isLt2M
         }
     }
 }

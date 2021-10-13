@@ -14,7 +14,14 @@ export default {
             { hid: 'description', name: 'description', content: '' },
             { name: 'format-detection', content: 'telephone=no' }
         ],
-        link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+        link: [
+            { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+            {
+                rel: 'stylesheet',
+                href:
+                    'https://fonts.googleapis.com/css2?family=Open+Sans&display=swap'
+            }
+        ]
     },
     generate: {
         fallback: true
@@ -22,7 +29,7 @@ export default {
     target: 'static',
     srcDir: 'source/client/',
     // Global CSS: https://go.nuxtjs.dev/config-css
-    css: [],
+    css: ['@/assets/css/global.css'],
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
     plugins: [

@@ -1,6 +1,6 @@
 <template>
     <div class="relative w-full max-w-xl mr-6 focus-within:text-black-500">
-        <label class="block w-full text-gray-500 pb-1">{{ field.label }}</label>
+        <label class="block w-full text-gray-500 pb-1 text-left">{{ field.label }}</label>
         <a-range-picker
             size="large"
             :placeholder="['Bắt đầu', 'Kết thúc']"

@@ -1,5 +1,5 @@
 <template>
-    <div class="-my-2 py-2 overflow-x-auto">
+    <div class="-my-2 overflow-x-auto">
         <search
             :configSearch="configSearch"
             :configCRUD="configCRUD"

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="px-6 py-3">
         <a-row>
             <a-col :span="15">
                 <a-form

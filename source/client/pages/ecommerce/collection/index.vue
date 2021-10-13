@@ -1,14 +1,69 @@
 <template>
-    <div class="-my-2 py-2 overflow-x-auto">
+    <div class="-my-2 overflow-x-auto rounded-md">
         <search
             :configSearch="configSearch"
             :configCRUD="configCRUD"
+            @startFilter="startFilter($event)"
+            @clearFilter="clearFilter($event)"
         />
-        <div class="align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard px-8 pt-3">
-            <a-table
+        <div class="align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard px-2 pt-3">
+            <a-row
+                type="flex"
+                justify="space-between"
+                :gutter="[40,24]"
+            >
+                <a-col
+                    v-for="(item, key) in items"
+                    :key="key"
+                    :span="4"
+                >
+                    <a-card
+                        class="card"
+                        hoverable
+                    >
+                        <img
+                            slot="cover"
+                            alt="example"
+                            src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+                        />
+                        <a-card-meta :title="item.name">
+                            <template slot="description">
+                                <a-switch v-model="item.isActive" />
+                            </template>
+                        </a-card-meta>
+                        <div class="actions card-hover:block absolute top-1 left-1 hidden">
+                            <a-button
+                                class="pr-3"
+                                type="warning"
+                                icon="edit"
+                                @click="
+                                    $router.push({
+                                        name: 'collection-id',
+                                        params: { id: record.id }
+                                    })
+                                "
+                            />
+                            <a-popconfirm
+                                title="Do you want to delete this item?"
+                                ok-text="Agree"
+                                cancel-text="Cancel"
+                                @confirm="remove(text, record)"
+                            >
+                                <a-button
+                                    type="danger"
+                                    icon="delete"
+                                />
+                            </a-popconfirm>
+                        </div>
+                    </a-card>
+                </a-col>
+            </a-row>
+            <!-- <a-table
                 :columns="configCRUD.fields"
                 rowKey="uid"
                 :data-source="items"
+                :row-selection="rowSelection"
+                :expanded-row-keys.sync="expandedRowKeys"
             >
                 <span
                     slot="image"
@@ -56,20 +111,36 @@
                         />
                     </a-popconfirm>
                 </span>
-            </a-table>
+            </a-table> -->
         </div>
     </div>
 </template>
 <script>
 import Search from '@/components/form-search/Search'
 import fetchDataService from '@/services/fetch-data'
-
+const rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+        console.log(
+            `selectedRowKeys: ${selectedRowKeys}`,
+            'selectedRows: ',
+            selectedRows
+        )
+    },
+    onSelect: (record, selected, selectedRows) => {
+        console.log(record, selected, selectedRows)
+    },
+    onSelectAll: (selected, selectedRows, changeRows) => {
+        console.log(selected, selectedRows, changeRows)
+    }
+}
 export default {
     components: {
         Search
     },
     data() {
         return {
+            rowSelection,
+            expandedRowKeys: [],
             configSearch: {
                 title: 'Danh mục',
                 btnAdd: true,
@@ -77,12 +148,12 @@ export default {
                 fields: [
                     {
                         label: 'Tìm kiếm danh mục',
-                        name: 'code',
+                        name: 'name',
                         type: 'text',
-                        placeholder: 'Nhập mã nhân viên'
+                        placeholder: 'Nhập tên danh mục'
                     },
                     {
-                        label: 'Khoảng thời gian tạo tài khoản',
+                        label: 'Khoảng thời gian tạo danh mục',
                         name: 'date-range',
                         type: 'date-range'
                     }
@@ -152,9 +223,50 @@ export default {
         edit(text, record) {
             console.log(text, record)
         },
-        remove(text, record) {
-            console.log(text, record)
+        async remove(text, record) {
+            try {
+                await fetchDataService.deleteOne(
+                    this,
+                    this.configCRUD.model,
+                    record.id
+                )
+                this.$notification.success({
+                    message: 'Thành công',
+                    description: 'Xóa chuyên mục thành công'
+                })
+                await this.fetchData()
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        startFilter(event) {
+            this.condition = Object.assign(this.condition, event)
+            this.fetchData()
+        },
+        clearFilter(event) {
+            this.condition = Object.assign(
+                {
+                    page: 1,
+                    perPage: 10
+                },
+                event
+            )
+            this.fetchData()
         }
     }
 }
 </script>
+<style lang="css" scoped>
+/* .card:hover .ant-card-actions {
+    display: block;
+}
+.ant-card-actions {
+    position: absolute;
+    background: transparent;
+    top: 0;
+    display: none;
+} */
+.card:hover .actions {
+    display: block !important;
+}
+</style>
