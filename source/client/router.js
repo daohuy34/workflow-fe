@@ -11,9 +11,23 @@ const Login = () =>
         m => m.default || m
     )
 
+// Tag
+const TagIndex = () =>
+    import(/* @vite-ignore */ '@/pages/ecommerce/tag/index.vue').then(
+        m => m.default || m
+    )
+const TagId = () =>
+    import(/* @vite-ignore */ '@/pages/ecommerce/tag/_id.vue').then(
+        m => m.default || m
+    )
+
 //Product
 const ProductIndex = () =>
     import(/* @vite-ignore */ '@/pages/ecommerce/product/index.vue').then(
+        m => m.default || m
+    )
+const ProductId = () =>
+    import(/* @vite-ignore */ '@/pages/ecommerce/product/_id.vue').then(
         m => m.default || m
     )
 
@@ -85,9 +99,24 @@ export function createRouter() {
             },
             // ecommerce
             {
+                path: '/tag',
+                component: TagIndex,
+                name: 'tag'
+            },
+            {
+                path: '/tag/:id',
+                component: TagId,
+                name: 'tag-id'
+            },
+            {
                 path: '/san-pham',
                 component: ProductIndex,
                 name: 'product'
+            },
+            {
+                path: '/san-pham/:id',
+                component: ProductId,
+                name: 'product-id'
             },
             {
                 path: '/qua-tang',

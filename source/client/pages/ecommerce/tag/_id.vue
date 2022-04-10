@@ -2,56 +2,41 @@
     <div class="px-6 py-3">
         <a-row>
             <a-col>
-                <a-form :model="form" :layout="formLayout">
-                    <a-form-item label="Tên danh mục">
+                <a-form
+                    :model="form"
+                    :layout="formLayout"
+                >
+                    <a-form-item label="Name tag">
                         <a-input
                             v-model="form.name"
-                            v-decorator="[
-                                'id',
-                                {
-                                    rules: [
-                                        {
-                                            required: true,
-                                            message: 'Please input your name!'
-                                        }
-                                    ]
-                                }
-                            ]"
+                            v-decorator="['id', { rules: [{ required: true, message: 'Please input your name!' }] }]"
                         />
                     </a-form-item>
-                    <a-form-item label="Slug danh mục">
+                    <a-form-item label="Slug tag">
                         <a-input
-                            :disabled="true"
                             v-model="form.slug"
-                            v-decorator="[
-                                'slug',
-                                {
-                                    rules: [
-                                        {
-                                            required: true,
-                                            message: 'Please input your slug!'
-                                        }
-                                    ]
-                                }
-                            ]"
+                            v-decorator="['slug', { rules: [{ required: true, message: 'Please input your slug!' }] }]"
                         />
                     </a-form-item>
-                    <a-form-item label="Miêu tả">
+                    <a-form-item label="Description">
                         <a-input
                             v-model="form.description"
-                            v-decorator="[
-                                'description',
-                                {
-                                    rules: [
-                                        {
-                                            required: true,
-                                            message:
-                                                'Please input your description!'
-                                        }
-                                    ]
-                                }
-                            ]"
+                            v-decorator="['description', { rules: [{ required: true, message: 'Please input your description!' }] }]"
                         />
+                    </a-form-item>
+                    <a-form-item label="Type">
+                        <a-select
+                            v-model="form.type"
+                            default-value=""
+                        >
+                            <a-select-option
+                                v-for="(type, key) in types"
+                                :key="key"
+                                :value="type.value"
+                            >
+                                {{type.text}}
+                            </a-select-option>
+                        </a-select>
                     </a-form-item>
                     <a-form-model-item label="Trạng thái">
                         <a-switch v-model="form.isActive" />
@@ -59,7 +44,11 @@
                 </a-form>
             </a-col>
         </a-row>
-        <a-row class="fixed bottom-0 right-0" type="flex" justify="end">
+        <a-row
+            class="fixed bottom-0 right-0"
+            type="flex"
+            justify="end"
+        >
             <a-button-group>
                 <button
                     @click="cancel"
@@ -88,17 +77,8 @@
 </template>
 <script>
 import fetchDataService from '@/services/fetch-data'
-import mixins from '@/mixins/mixins'
-
-function getBase64(img, callback) {
-    const reader = new FileReader()
-    reader.addEventListener('load', () => callback(reader.result))
-    reader.readAsDataURL(img)
-}
 
 export default {
-    name: 'collection-id',
-    // mixins: [mixins],
     data() {
         return {
             loading: false,
@@ -107,18 +87,30 @@ export default {
                 name: '',
                 slug: '',
                 description: '',
-                logo:
-                    'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-                tag: [],
-                children: []
-            }
+                type: '',
+                isActive: true
+            },
+            types: [
+                {
+                    value: 'product',
+                    text: 'product'
+                },
+                {
+                    value: 'collection',
+                    text: 'collection'
+                },
+                {
+                    value: 'gift',
+                    text: 'gift'
+                }
+            ]
         }
     },
     async fetch() {
         if (this.$route.params.id !== 'add') {
             this.form = await fetchDataService.getOne(
                 this,
-                `v1/collections/${this.$route.params.id}`
+                `v1/tags/${this.$route.params.id}`
             )
         }
     },
@@ -136,27 +128,27 @@ export default {
                 if (this.$route.params.id === 'add') {
                     const result = await fetchDataService.createOne(
                         this,
-                        'collections',
+                        'tags',
                         this.form
                     )
                     if (result && result.id) {
                         this.$notification.success({
-                            message: 'Tạo danh mục thành thông'
+                            message: 'Tạo thẻ thành thông'
                         })
-                        this.$router.push({ name: 'collection' })
+                        this.$router.push({ name: 'tag' })
                     }
                 } else {
                     const result = await fetchDataService.updateOne(
                         this,
-                        'collections',
+                        'tags',
                         this.$route.params.id,
                         this.form
                     )
                     if (result && result.id) {
                         this.$notification.success({
-                            message: 'Cập nhật danh mục thành thông'
+                            message: 'Cập nhật thẻ thành thông'
                         })
-                        this.$router.push({ name: 'collection' })
+                        this.$router.push({ name: 'tag' })
                     }
                 }
             } catch (error) {
@@ -176,31 +168,6 @@ export default {
                 return false
             }
             return true
-        },
-        handleChange(info) {
-            if (info.file.status === 'uploading') {
-                this.loading = true
-                return
-            }
-            if (info.file.status === 'done') {
-                // Get this url from response in real world.
-                getBase64(info.file.originFileObj, imageUrl => {
-                    this.form.logo = imageUrl
-                    this.loading = false
-                })
-            }
-        },
-        beforeUpload(file) {
-            const isJpgOrPng =
-                file.type === 'image/jpeg' || file.type === 'image/png'
-            if (!isJpgOrPng) {
-                this.$message.error('You can only upload JPG file!')
-            }
-            const isLt2M = file.size / 1024 / 1024 < 2
-            if (!isLt2M) {
-                this.$message.error('Image must smaller than 2MB!')
-            }
-            return isJpgOrPng && isLt2M
         }
     }
 }

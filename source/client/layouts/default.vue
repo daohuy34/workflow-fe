@@ -52,16 +52,16 @@ export default {
     },
     watch: {
         windowHeight: function() {
-            this.$confirm({
-                content:
-                    'The screen size has changed, reload the page to update the look',
-                onOk() {
-                    location.reload()
-                },
-                onCancel() {
-                    location.reload()
-                }
-            })
+            // this.$confirm({
+            //     content:
+            //         'The screen size has changed, reload the page to update the look',
+            //     onOk() {
+            //         location.reload()
+            //     },
+            //     onCancel() {
+            //         location.reload()
+            //     }
+            // })
         },
         collapsed: function(newVal) {
             if (newVal) {

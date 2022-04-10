@@ -3,7 +3,7 @@
         <label class="block w-full text-gray-500 pb-1 text-left">{{ field.label }}</label>
         <a-range-picker
             size="large"
-            :placeholder="['Bắt đầu', 'Kết thúc']"
+            :placeholder="['Start', 'End']"
             @change="onChange"
         />
     </div>

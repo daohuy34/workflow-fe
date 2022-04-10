@@ -36,7 +36,8 @@ export default {
         { src: '~plugins/axios' },
         { src: '~plugins/filter' },
         { src: '~plugins/vuex-persisted.js', ssr: false },
-        { src: '~plugins/ant-design.js', ssr: false }
+        { src: '~plugins/ant-design.js', ssr: false },
+        { src: '~plugins/vue2-editor.js', ssr: false }
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
@@ -89,6 +90,7 @@ export default {
     modules: [
         '@nuxtjs/axios',
         '@nuxtjs/auth',
+        'vue2-editor/nuxt',
         ['@nuxtjs/router', { fileName: 'router.js' }],
         [
             '@nuxtjs/firebase',

@@ -48,6 +48,7 @@
         "lodash": "^4.17.21",
         "nuxt": "^2.15.7",
         "nuxt-fontawesome": "^0.4.0",
+        "vue2-editor": "^2.10.3",
         "vue2-filters": "^0.13.0",
         "vuex-persistedstate": "^4.0.0"
     },

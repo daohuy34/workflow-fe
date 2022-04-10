@@ -58,7 +58,7 @@
                     @click="startFilter"
                     class="px-5 py-2 border-blue-500 border text-blue-500 rounded transition duration-300 hover:bg-blue-700 hover:text-white focus:outline-none"
                 >
-                    Lọc
+                    Start filter
                 </button>
             </div>
             <div>
@@ -66,7 +66,7 @@
                     @click="clearFilter"
                     class="px-5 py-2 border-yellow-500 border text-yellow-500 rounded transition duration-300 hover:bg-yellow-500 hover:text-white focus:outline-none"
                 >
-                    Xóa bộ lọc
+                    Clear filter
                 </button>
             </div>
         </div>

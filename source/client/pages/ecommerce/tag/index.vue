@@ -11,9 +11,6 @@
                 :columns="configCRUD.fields"
                 rowKey="uid"
                 :data-source="items"
-                :pagination="{total: 100, current: condition.page}"
-                @change="onChange"
-                :loading="loading"
             >
                 <span
                     slot="image"
@@ -26,11 +23,19 @@
                     />
                 </span>
                 <span
-                    slot="tag"
+                    slot="tag-type"
+                    slot-scope="type"
+                >
+                    <a-tag :color="type==='product' ? 'geekblue' : type==='gift'? 'volcano': 'purple'">
+                        {{ type==='product' ? 'Product' : type==='gift'? 'Gift': 'Collection' }}
+                    </a-tag>
+                </span>
+                <span
+                    slot="tag-isActive"
                     slot-scope="isActive"
                 >
                     <a-tag :color="isActive ? 'geekblue' : 'volcano'">
-                        {{ isActive ? 'Activated' : 'Disable' }}
+                        {{ isActive ? 'Kích hoạt' : 'Vô hiệu hóa' }}
                     </a-tag>
                 </span>
                 <span
@@ -40,7 +45,7 @@
                     <a-button
                         @click="
                             $router.push({
-                                name: 'collection-id',
+                                name: 'tag-id',
                                 params: { id: record.id }
                             })
                         "
@@ -49,9 +54,9 @@
                         icon="edit"
                     />
                     <a-popconfirm
-                        title="Do you want to delete this collection?"
-                        ok-text="Agree"
-                        cancel-text="Cancel"
+                        title="Bạn có muốn xóa tài khoản này?"
+                        ok-text="Đồng ý"
+                        cancel-text="Hủy bỏ"
                         @confirm="remove(text, record)"
                     >
                         <a-button
@@ -68,43 +73,46 @@
 <script>
 import Search from '@/components/form-search/Search'
 import fetchDataService from '@/services/fetch-data'
-const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-        console.log(
-            `selectedRowKeys: ${selectedRowKeys}`,
-            'selectedRows: ',
-            selectedRows
-        )
-    },
-    onSelect: (record, selected, selectedRows) => {
-        console.log(record, selected, selectedRows)
-    },
-    onSelectAll: (selected, selectedRows, changeRows) => {
-        console.log(selected, selectedRows, changeRows)
-    }
-}
+
 export default {
     components: {
         Search
     },
     data() {
         return {
-            loading: false,
-            rowSelection,
-            expandedRowKeys: [],
             configSearch: {
-                title: 'Collection',
+                title: 'Tag',
                 btnAdd: true,
-                linkAdd: 'collection-id',
+                linkAdd: 'tag-id',
                 fields: [
                     {
-                        label: 'Search collection',
+                        label: 'Search tag',
                         name: 'name',
                         type: 'text',
-                        placeholder: 'Enter the collection name'
+                        placeholder: 'Enter tag name'
                     },
                     {
-                        label: 'Collection creation time',
+                        label: 'Search type',
+                        name: 'type',
+                        type: 'select-single',
+                        placeholder: 'Enter tag type',
+                        options: [
+                            {
+                                label: 'Product',
+                                value: 'product'
+                            },
+                            {
+                                label: 'Gift',
+                                value: 'gift'
+                            },
+                            {
+                                label: 'Collection',
+                                value: 'collection'
+                            }
+                        ]
+                    },
+                    {
+                        label: 'Tag creation time',
                         name: 'date-range',
                         type: 'date-range'
                     }
@@ -113,39 +121,39 @@ export default {
             configCRUD: {
                 btnEdit: true,
                 btnDel: true,
-                model: 'collections',
+                model: 'tags',
                 fields: [
-                    // {
-                    //     title: 'Logo',
-                    //     key: 'logo',
-                    //     dataIndex: 'logo',
-                    //     scopedSlots: { customRender: 'image' }
-                    // },
                     {
-                        title: 'Tên nhóm sản phẩm',
+                        title: 'Name tag',
                         key: 'name',
                         dataIndex: 'name'
                     },
                     {
-                        title: 'Trạng thái',
-                        key: 'isActive',
-                        dataIndex: 'isActive',
-                        scopedSlots: { customRender: 'tag' }
+                        title: 'Type',
+                        key: 'type',
+                        dataIndex: 'type',
+                        scopedSlots: { customRender: 'tag-type' }
                     },
                     {
-                        title: 'Hành động',
+                        title: 'Status',
+                        key: 'isActive',
+                        dataIndex: 'isActive',
+                        scopedSlots: { customRender: 'tag-isActive' }
+                    },
+                    {
+                        title: 'Actions',
                         key: 'action',
                         scopedSlots: { customRender: 'action' }
                     }
                 ],
                 actionPermissions: {
-                    delete: 'collection_delete',
-                    edit: 'collection_upsert',
-                    create: 'collection_create'
+                    delete: 'tag_delete',
+                    edit: 'tag_upsert',
+                    create: 'tag_create'
                 }
             },
             items: [],
-            totalItem: 100,
+            totalItem: 0,
             condition: {
                 page: 1,
                 perPage: 10
@@ -158,7 +166,6 @@ export default {
     methods: {
         async fetchData() {
             try {
-                this.loading = true
                 const data = await fetchDataService.getList(
                     this,
                     this.configCRUD.model,
@@ -170,8 +177,6 @@ export default {
                 }
             } catch (error) {
                 console.log(error)
-            } finally {
-                this.loading = false
             }
         },
         edit(text, record) {
@@ -206,10 +211,6 @@ export default {
                 event
             )
             this.fetchData()
-        },
-        async onChange(e) {
-            this.condition.page = e.current
-            await this.fetchData()
         }
     }
 }
