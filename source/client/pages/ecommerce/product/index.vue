@@ -37,6 +37,11 @@
                         {{ collection.name }}
                     </p>
                 </span>
+                <span slot="tag" slot-scope="isActive">
+                    <a-tag :color="isActive ? 'geekblue' : 'volcano'">
+                        {{ isActive ? 'Activated' : 'Disable' }}
+                    </a-tag>
+                </span>
                 <span slot="action" slot-scope="text, record">
                     <a-button
                         @click="
