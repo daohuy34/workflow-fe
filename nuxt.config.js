@@ -27,6 +27,7 @@ export default {
         fallback: true
     },
     target: 'static',
+    ssr: false,
     srcDir: 'source/client/',
     // Global CSS: https://go.nuxtjs.dev/config-css
     css: ['@/assets/css/global.css'],
