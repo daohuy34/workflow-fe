@@ -1,8 +1,11 @@
 <template>
     <div class="px-6 py-3">
         <a-row>
-            <a-col>
-                <a-form :model="form" :layout="formLayout">
+            <a-col :span="16">
+                <a-form
+                    :model="form"
+                    :layout="formLayout"
+                >
                     <a-form-item label="Tên danh mục">
                         <a-input
                             v-model="form.name"
@@ -58,8 +61,23 @@
                     </a-form-model-item>
                 </a-form>
             </a-col>
+            <a-col :span="6">
+                <a-upload
+                    name="file"
+                    :multiple="false"
+                    :customRequest="customRequest"
+                    @change="handleChange"
+                >
+                    <a-button>
+                        <a-icon type="upload" /> Click to Upload </a-button>
+                </a-upload>
+            </a-col>
         </a-row>
-        <a-row class="fixed bottom-0 right-0" type="flex" justify="end">
+        <a-row
+            class="fixed bottom-0 right-0"
+            type="flex"
+            justify="end"
+        >
             <a-button-group>
                 <button
                     @click="cancel"
@@ -111,7 +129,8 @@ export default {
                     'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
                 tag: [],
                 children: []
-            }
+            },
+            fileList: []
         }
     },
     async fetch() {
@@ -128,6 +147,36 @@ export default {
         }
     },
     methods: {
+        async customRequest({ onSuccess, onError, file }) {
+            const formData = new FormData()
+            formData.append('upload_preset', 'dhz7oe2o')
+            formData.append('file', file)
+            this.$axios({
+                method: 'post',
+                url: 'https://api.cloudinary.com/v1_1/dqlpxyluj/image/upload',
+                data: formData,
+                headers: { 'Content-Type': 'multipart/form-data' }
+            })
+                .then(function(response) {
+                    //handle success
+                    console.log(response)
+                })
+                .catch(function(response) {
+                    //handle error
+                    console.log(response)
+                })
+        },
+        handleChange(info) {
+            const status = info.file.status
+            if (status !== 'uploading') {
+                // show update progress console.log(info.file, info.fileList);
+            }
+            if (status === 'done') {
+                // show success message
+            } else if (status === 'error') {
+                // show error message
+            }
+        },
         async submit() {
             if (!this.validations()) {
                 return
