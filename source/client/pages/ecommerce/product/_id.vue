@@ -1,8 +1,14 @@
 <template>
     <div class="px-6 py-3">
-        <a-form :model="form" :layout="formLayout">
+        <a-form
+            :model="form"
+            :layout="formLayout"
+        >
             <a-row>
-                <a-col class="mr-4" :span="16">
+                <a-col
+                    class="mr-4"
+                    :span="16"
+                >
                     <a-form-item label="Tên sản phẩm">
                         <a-input
                             v-model="form.name"
@@ -74,28 +80,41 @@
                         type="vertical"
                     />
                 </a-col>
-                <a-col class="ml-4" :span="6">
+                <a-col
+                    class="ml-4"
+                    :span="6"
+                >
                     <a-form-item label="Ảnh đại diện">
                         <a-upload-dragger
                             name="file"
                             :multiple="false"
-                            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                            @change="selectFile"
                         >
-                            <p class="ant-upload-drag-icon">
-                                <a-icon type="inbox" />
-                            </p>
-                            <p class="ant-upload-text">
-                                Click or drag file to this area to upload
-                            </p>
-                            <p class="ant-upload-hint">
-                                Support for a single or bulk upload. Strictly
-                                prohibit from uploading company data or other
-                                band files
-                            </p>
+                            <img
+                                v-if="form.logo"
+                                alt="example"
+                                style="width: 100%"
+                                :src="form.logo"
+                            />
+                            <template v-else>
+                                <p class="ant-upload-drag-icon">
+                                    <a-icon type="inbox" />
+                                </p>
+                                <p class="ant-upload-text">
+                                    Click or drag file to this area to upload
+                                </p>
+                                <p class="ant-upload-hint">
+                                    Support for a single or bulk upload. Strictly prohibit from uploading company data or other
+                                    band files
+                                </p>
+                            </template>
                         </a-upload-dragger>
                     </a-form-item>
                     <div class="flex">
-                        <a-form-item class="px-6 " label="Giá gốc">
+                        <a-form-item
+                            class="px-6 "
+                            label="Giá gốc"
+                        >
                             <a-input-number
                                 id="inputNumber"
                                 v-model="form.price"
@@ -127,7 +146,10 @@
                         Sản phẩm được giảm:
                         {{ form.originalPrice * (100 / form.price) || 0 }}%
                     </p>
-                    <a-form-item class="px-6 " label="Trọng lượng">
+                    <a-form-item
+                        class="px-6 "
+                        label="Trọng lượng"
+                    >
                         <a-input-number
                             id="inputNumber"
                             v-model="form.grams"
@@ -140,13 +162,20 @@
                             "
                         />
                     </a-form-item>
-                    <a-form-item class="px-6 " label="Trạng thái">
+                    <a-form-item
+                        class="px-6 "
+                        label="Trạng thái"
+                    >
                         <a-switch v-model="form.isActive" />
                     </a-form-item>
                 </a-col>
             </a-row>
         </a-form>
-        <a-row class="fixed bottom-0 right-0" type="flex" justify="end">
+        <a-row
+            class="fixed bottom-0 right-0"
+            type="flex"
+            justify="end"
+        >
             <a-button-group>
                 <button
                     @click="cancel"
@@ -194,7 +223,7 @@ export default {
                 price: 0,
                 originalPrice: 0,
                 grams: 100,
-                logo: 'abc',
+                logo: '',
                 isActive: false,
                 isSoldOut: true,
                 salePercent: 0
@@ -253,6 +282,34 @@ export default {
                 }
             } catch (error) {
                 console.log(error)
+            }
+        },
+        async selectFile(e) {
+            const file = e.file.originFileObj
+
+            /* Make sure file exists */
+            if (!file) return
+
+            // /* create a reader */
+            const readData = f =>
+                new Promise(resolve => {
+                    const reader = new FileReader()
+                    reader.onloadend = () => resolve(reader.result)
+                    reader.readAsDataURL(f)
+                })
+
+            // /* Read data */
+            const data = await readData(file)
+
+            /* upload the converted data */
+            const instance = await this.$cloudinary.upload(data, {
+                folder: 'hair',
+                uploadPreset: 'dhz7oe2o'
+            })
+            console.log(instance)
+
+            if (instance) {
+                this.form.logo = instance.url
             }
         },
         cancel() {

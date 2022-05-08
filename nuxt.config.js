@@ -92,6 +92,7 @@ export default {
         '@nuxtjs/axios',
         '@nuxtjs/auth',
         'vue2-editor/nuxt',
+        '@nuxtjs/cloudinary',
         ['@nuxtjs/router', { fileName: 'router.js' }],
         [
             '@nuxtjs/firebase',
@@ -172,6 +173,9 @@ export default {
     axios: {
         // See https://github.com/nuxt-community/axios-module#options
         baseURL: '$API_URL'
+    },
+    cloudinary: {
+        cloudName: 'dqlpxyluj'
     },
     auth: {
         // Options

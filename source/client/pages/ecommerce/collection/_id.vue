@@ -62,15 +62,30 @@
                 </a-form>
             </a-col>
             <a-col :span="6">
-                <a-upload
+                <a-upload-dragger
                     name="file"
                     :multiple="false"
-                    :customRequest="customRequest"
-                    @change="handleChange"
+                    @change="selectFile"
                 >
-                    <a-button>
-                        <a-icon type="upload" /> Click to Upload </a-button>
-                </a-upload>
+                    <img
+                        v-if="form.logo"
+                        alt="example"
+                        style="width: 100%"
+                        :src="form.logo"
+                    />
+                    <template v-else>
+                        <p class="ant-upload-drag-icon">
+                            <a-icon type="inbox" />
+                        </p>
+                        <p class="ant-upload-text">
+                            Click or drag file to this area to upload
+                        </p>
+                        <p class="ant-upload-hint">
+                            Support for a single or bulk upload. Strictly prohibit from uploading company data or other
+                            band files
+                        </p>
+                    </template>
+                </a-upload-dragger>
             </a-col>
         </a-row>
         <a-row
@@ -125,12 +140,12 @@ export default {
                 name: '',
                 slug: '',
                 description: '',
-                logo:
-                    'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                logo: '',
                 tag: [],
                 children: []
             },
-            fileList: []
+            fileList: [],
+            previewImage: null
         }
     },
     async fetch() {
@@ -147,24 +162,33 @@ export default {
         }
     },
     methods: {
-        async customRequest({ onSuccess, onError, file }) {
-            const formData = new FormData()
-            formData.append('upload_preset', 'dhz7oe2o')
-            formData.append('file', file)
-            this.$axios({
-                method: 'post',
-                url: 'https://api.cloudinary.com/v1_1/dqlpxyluj/image/upload',
-                data: formData,
-                headers: { 'Content-Type': 'multipart/form-data' }
+        async selectFile(e) {
+            const file = e.file.originFileObj
+
+            /* Make sure file exists */
+            if (!file) return
+
+            // /* create a reader */
+            const readData = f =>
+                new Promise(resolve => {
+                    const reader = new FileReader()
+                    reader.onloadend = () => resolve(reader.result)
+                    reader.readAsDataURL(f)
+                })
+
+            // /* Read data */
+            const data = await readData(file)
+
+            /* upload the converted data */
+            const instance = await this.$cloudinary.upload(data, {
+                folder: 'hair',
+                uploadPreset: 'dhz7oe2o'
             })
-                .then(function(response) {
-                    //handle success
-                    console.log(response)
-                })
-                .catch(function(response) {
-                    //handle error
-                    console.log(response)
-                })
+            console.log(instance)
+
+            if (instance) {
+                this.form.logo = instance.url
+            }
         },
         handleChange(info) {
             const status = info.file.status

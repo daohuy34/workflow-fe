@@ -6,13 +6,30 @@
             @startFilter="startFilter($event)"
             @clearFilter="clearFilter($event)"
         />
-        <div
-            class="align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard px-2 pt-3"
-        >
-            <a-table :columns="configCRUD.fields" :data-source="items">
-                <a slot="name" slot-scope="text">{{ text }}</a>
+        <div class="align-middle inline-block min-w-full shadow overflow-hidden bg-white shadow-dashboard px-2 pt-3">
+            <a-table
+                :columns="configCRUD.fields"
+                :data-source="items"
+            >
+                <a
+                    slot="name"
+                    slot-scope="text"
+                >{{ text }}</a>
                 <span slot="customTitle">Name</span>
-                <span slot="tags" slot-scope="tags">
+                <span
+                    slot="image"
+                    slot-scope="text, record"
+                >
+                    <a-avatar
+                        :size="64"
+                        class="w-60 h-60"
+                        :src="record.logo"
+                    />
+                </span>
+                <span
+                    slot="tags"
+                    slot-scope="tags"
+                >
                     <a-tag
                         v-for="tag in tags"
                         :key="tag"
@@ -27,7 +44,10 @@
                         {{ tag.toUpperCase() }}
                     </a-tag>
                 </span>
-                <span slot="collections" slot-scope="collections">
+                <span
+                    slot="collections"
+                    slot-scope="collections"
+                >
                     <!-- {{ collections }} -->
                     <p
                         class="mb-0"
@@ -37,12 +57,18 @@
                         {{ collection.name }}
                     </p>
                 </span>
-                <span slot="tag" slot-scope="isActive">
+                <span
+                    slot="tag"
+                    slot-scope="isActive"
+                >
                     <a-tag :color="isActive ? 'geekblue' : 'volcano'">
                         {{ isActive ? 'Activated' : 'Disable' }}
                     </a-tag>
                 </span>
-                <span slot="action" slot-scope="text, record">
+                <span
+                    slot="action"
+                    slot-scope="text, record"
+                >
                     <a-button
                         @click="
                             $router.push({
@@ -59,7 +85,11 @@
                         cancel-text="Cancel"
                         @confirm="remove(text, record)"
                     >
-                        <a-button type="danger" shape="circle" icon="delete" />
+                        <a-button
+                            type="danger"
+                            shape="circle"
+                            icon="delete"
+                        />
                     </a-popconfirm>
                     <template v-if="configCRUD.moreArray.length > 0">
                         <a-dropdown>
@@ -194,6 +224,12 @@ export default {
                         key: 'collections',
                         dataIndex: 'collections',
                         scopedSlots: { customRender: 'collections' }
+                    },
+                    {
+                        title: 'Logo',
+                        key: 'logo',
+                        dataIndex: 'logo',
+                        scopedSlots: { customRender: 'image' }
                     },
                     {
                         dataIndex: 'name',

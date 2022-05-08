@@ -115,12 +115,12 @@ export default {
                 btnDel: true,
                 model: 'collections',
                 fields: [
-                    // {
-                    //     title: 'Logo',
-                    //     key: 'logo',
-                    //     dataIndex: 'logo',
-                    //     scopedSlots: { customRender: 'image' }
-                    // },
+                    {
+                        title: 'Logo',
+                        key: 'logo',
+                        dataIndex: 'logo',
+                        scopedSlots: { customRender: 'image' }
+                    },
                     {
                         title: 'Tên nhóm sản phẩm',
                         key: 'name',
